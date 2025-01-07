@@ -1,6 +1,6 @@
 {
   "name": "pdf-to-images-browser",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "A lightweight and simple PDF-to-image library for browser",
   "main": "./build/index.js",
   "module": "./build/index.mjs",
