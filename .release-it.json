@@ -1,7 +1,7 @@
 {
   "git": {
     "requireBranch": "main",
-    "commitMessage": "chore(release): v${version}",
+    "commitMessage": "chore(release): v${version} [skip-release]",
     "publish": true,
     "requireCommits": true,
     "requireCleanWorkingDir": false,
