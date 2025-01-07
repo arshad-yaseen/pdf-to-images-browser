@@ -14,8 +14,9 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: 'Starter',
-  description: 'Starter',
+  title: 'PDF to Images Browser',
+  description:
+    'A lightweight, no-configuration PDF-to-image library for browsers',
 };
 
 export default function RootLayout({

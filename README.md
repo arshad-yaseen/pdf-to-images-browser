@@ -1,3 +1,6 @@
+[![npm version](https://img.shields.io/npm/v/pdf-to-images-browser.svg)](https://www.npmjs.com/package/pdf-to-images-browser)
+[![TypeScript](https://img.shields.io/badge/TypeScript-Ready-blue.svg)](https://www.typescriptlang.org/)
+
 # PDF to Images Browser
 
 A lightweight, browser-based library for converting PDF files to images with ease. Built with PDF.js, this package provides a simple yet powerful API to transform PDF documents into high-quality PNG or JPEG images.
@@ -13,6 +16,8 @@ A lightweight, browser-based library for converting PDF files to images with eas
 - 📦 Multiple output formats (PNG/JPEG) and types (base64, buffer, blob, dataURL)
 - ⚡ Convert specific pages or page ranges
 - 🛡️ Robust error handling and TypeScript support
+
+[Demo](https://pdf-to-images-browser.arshadyaseen.com/)
 
 ## Table of Contents
 

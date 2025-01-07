@@ -46,6 +46,7 @@
     "type": "git",
     "url": "git+https://github.com/arshad-yaseen/pdf-to-images-browser.git"
   },
+  "homepage": "https://pdf-to-images-browser.arshadyaseen.com",
   "maintainers": [
     {
       "name": "Arshad Yaseen",
