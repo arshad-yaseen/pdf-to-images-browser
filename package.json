@@ -1,7 +1,7 @@
 {
-  "name": "my-typescript-lib-starter",
+  "name": "pdf-to-images-browser",
   "version": "0.1.0",
-  "description": "My Typescript Library Starter",
+  "description": "A lightweight and simple PDF-to-image library for browser",
   "main": "./build/index.js",
   "module": "./build/index.mjs",
   "types": "./build/index.d.ts",
@@ -35,10 +35,14 @@
     "typescript": "^5.4.3",
     "vitest": "^2.0.5"
   },
-  "keywords": [],
+  "keywords": [
+    "pdf",
+    "images",
+    "browser"
+  ],
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/arshad-yaseen/my-typescript-lib-starter.git"
+    "url": "git+https://github.com/arshad-yaseen/pdf-to-images-browser.git"
   },
   "maintainers": [
     {
@@ -49,5 +53,7 @@
   ],
   "license": "MIT",
   "author": "Arshad Yaseen <m@arshadyaseen.com> (https://arshadyaseen.com)",
-  "dependencies": {}
+  "dependencies": {
+    "pdfjs-dist": "^4.10.38"
+  }
 }
