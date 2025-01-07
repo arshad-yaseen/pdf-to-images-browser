@@ -1,0 +1,53 @@
+{
+  "name": "my-typescript-lib-starter",
+  "version": "0.1.0",
+  "description": "My Typescript Library Starter",
+  "main": "./build/index.js",
+  "module": "./build/index.mjs",
+  "types": "./build/index.d.ts",
+  "files": [
+    "build"
+  ],
+  "scripts": {
+    "build": "tsup src/index.ts",
+    "dev": "tsup src/index.ts --watch",
+    "test": "vitest",
+    "dev:test-ui": "pnpm -C tests/ui dev",
+    "tsc": "tsc --noEmit",
+    "lint": "eslint . --ext .ts,.tsx --fix",
+    "lint:test-ui": "pnpm -C tests/ui lint",
+    "validate": "pnpm build && pnpm format && pnpm tsc && pnpm lint && pnpm lint:test-ui",
+    "format": "prettier --write .",
+    "release": "release-it",
+    "prepare": "husky"
+  },
+  "devDependencies": {
+    "@commitlint/cli": "^19.5.0",
+    "@commitlint/config-conventional": "^19.5.0",
+    "@ianvs/prettier-plugin-sort-imports": "^4.2.1",
+    "@release-it/conventional-changelog": "^8.0.2",
+    "@typescript-eslint/eslint-plugin": "^7.3.1",
+    "eslint": "^8.57.0",
+    "husky": "^9.1.6",
+    "prettier": "^3.2.5",
+    "release-it": "^17.6.0",
+    "tsup": "^8.0.2",
+    "typescript": "^5.4.3",
+    "vitest": "^2.0.5"
+  },
+  "keywords": [],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/arshad-yaseen/my-typescript-lib-starter.git"
+  },
+  "maintainers": [
+    {
+      "name": "Arshad Yaseen",
+      "email": "m@arshadyaseen.com",
+      "url": "https://arshadyaseen.com"
+    }
+  ],
+  "license": "MIT",
+  "author": "Arshad Yaseen <m@arshadyaseen.com> (https://arshadyaseen.com)",
+  "dependencies": {}
+}
