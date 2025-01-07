@@ -1,4 +1,4 @@
-import * as pdfjsLib from 'pdfjs-dist';
+import {getDocument} from 'pdfjs-dist';
 import type {
   DocumentInitParameters,
   PDFDocumentProxy,
@@ -38,7 +38,7 @@ async function processPDF(
   documentParams: DocumentInitParameters,
   options: PDFToImagesOptions,
 ): Promise<(string | Blob | ArrayBuffer)[]> {
-  const pdfDoc = await pdfjsLib.getDocument(documentParams).promise;
+  const pdfDoc = await getDocument(documentParams).promise;
   const numPages = pdfDoc.numPages;
   const pages = options.pages || 'all';
 

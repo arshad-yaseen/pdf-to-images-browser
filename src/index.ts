@@ -1,4 +1,4 @@
-import * as pdfjsLib from 'pdfjs-dist';
+import {GlobalWorkerOptions} from 'pdfjs-dist';
 
 import {BrowserEnvironmentError} from './errors';
 
@@ -8,8 +8,8 @@ if (typeof window === 'undefined') {
 }
 
 // Set the workerSrc for pdfjsLib
-if (!pdfjsLib.GlobalWorkerOptions.workerSrc) {
-  pdfjsLib.GlobalWorkerOptions.workerSrc =
+if (!GlobalWorkerOptions.workerSrc) {
+  GlobalWorkerOptions.workerSrc =
     'https://unpkg.com/pdfjs-dist@4.10.38/build/pdf.worker.min.mjs';
 }
 export {pdfToImages as default} from './core';
