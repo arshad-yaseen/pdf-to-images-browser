@@ -11,6 +11,7 @@
   "dependencies": {
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
+    "my-typescript-lib-starter": "workspace:*",
     "next": "15.1.3"
   },
   "devDependencies": {
