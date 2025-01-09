@@ -1,11 +1,25 @@
 
 
-## [0.1.6](https://github.com/arshad-yaseen/pdf-to-images-browser/compare/0.1.5...0.1.6) (2025-01-09)
+## [0.1.8](https://github.com/arshad-yaseen/pdf-to-images-browser/compare/0.1.6...0.1.8) (2025-01-09)
 
 
 ### 📚 Documentation
 
-* memory ([4b8b27a](https://github.com/arshad-yaseen/pdf-to-images-browser/commit/4b8b27a5de3fc41e53698dfdc35ab75219af23ed))
+* fix toc ([463d686](https://github.com/arshad-yaseen/pdf-to-images-browser/commit/463d6860d505b8c0e7d020fff7f0c488a885da73))
+* fix toc ([46a03d5](https://github.com/arshad-yaseen/pdf-to-images-browser/commit/46a03d5daef7c7d9f9cb15a1229900bf49e48a71))
+* fix toc ([a4de9d5](https://github.com/arshad-yaseen/pdf-to-images-browser/commit/a4de9d5b3aded7e452c31cd05c1062acf66fbf1a))
+* performance limits ([b5fdb77](https://github.com/arshad-yaseen/pdf-to-images-browser/commit/b5fdb771c9a1b720aa37f094c18e8a5cde777118))
+
+
+### 🔧 CI/CD
+
+* bump ([0b21b16](https://github.com/arshad-yaseen/pdf-to-images-browser/commit/0b21b1667f477a83148478c5c861605dba90d14b))
+
+## [0.1.6](https://github.com/arshad-yaseen/pdf-to-images-browser/compare/0.1.5...0.1.6) (2025-01-09)
+
+### 📚 Documentation
+
+- memory ([4b8b27a](https://github.com/arshad-yaseen/pdf-to-images-browser/commit/4b8b27a5de3fc41e53698dfdc35ab75219af23ed))
 
 ## [0.1.5](https://github.com/arshad-yaseen/pdf-to-images-browser/compare/0.1.4...0.1.5) (2025-01-09)
 
