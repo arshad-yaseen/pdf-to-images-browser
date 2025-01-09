@@ -95,7 +95,7 @@ Optional configuration object with the following properties:
 | `pages`      | `PDFPageSelection`                            | `'all'`     | Which pages to convert               |
 | `output`     | `'buffer' \| 'base64' \| 'blob' \| 'dataurl'` | `'base64'`  | Output format                        |
 | `docParams`  | `PDFDocumentParams`                           | `undefined` | Additional PDF.js parameters         |
-| `batchSize`  | `number`                                      | `5`         | Number of pages to process per batch |
+| `batchSize`  | `number`                                      | `3`         | Number of pages to process per batch |
 | `batchDelay` | `number`                                      | `100`       | Delay in ms between batches          |
 | `onProgress` | `function`                                    | `undefined` | Progress callback function           |
 
@@ -188,16 +188,13 @@ const bufferImages = await pdfToImages(pdfFile, {
 });
 ```
 
-### Using Batch Processing
+### Progress Tracking
 
 ```typescript
-// Process 3 pages at a time with progress updates
 const images = await pdfToImages(pdfFile, {
-  batchSize: 3,
-  batchDelay: 50,
   onProgress: ({completed, total, batch}) => {
     console.log(`Processed ${completed} of ${total} pages`);
-    // Handle new batch of images
+    // Handle new batch of images if needed
     batch.forEach(image => {
       // Process each image in the batch
     });
