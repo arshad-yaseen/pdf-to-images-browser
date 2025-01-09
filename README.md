@@ -32,11 +32,9 @@ A lightweight, browser-based library for converting PDF files to images with eas
 - [Using Batch Processing](#using-batch-processing)
 - [Error Handling](#error-handling)
 - [Browser Compatibility](#browser-compatibility)
+- [Performance Limits](#performance-limits)
 - [Server-side usage](#server-side-usage)
   - [Next.js Usage](#nextjs-usage)
-- [Performance Limits and Best Practices](#performance-limits-and-best-practices)
-  - [Browser Limitations](#browser-limitations)
-  - [Best Practices](#best-practices)
 - [Contributing](#contributing)
 - [License](#license)
 
@@ -231,10 +229,16 @@ try {
 
 This library works in all modern browsers that support the Canvas API and PDF.js:
 
-- Chrome (latest)
-- Firefox (latest)
-- Safari (latest)
-- Edge (latest)
+## Performance Limits
+
+The PDF to Images conversion process is constrained by browser limitations and available system resources. Here are the recommended limits for optimal performance:
+
+| Resource        | Recommended Limit | Maximum Limit | Notes                                |
+| --------------- | ----------------- | ------------- | ------------------------------------ |
+| File Size       | 100MB             | 200MB         | Browser memory constraints           |
+| Page Count      | 100 pages         | 200-300 pages | Depends on content complexity        |
+| Page Dimensions | 5000x5000px       | 8192x8192px   | Browser canvas limits                |
+| Scale Factor    | 2.0               | 4.0           | Memory usage increases quadratically |
 
 ## Server-side usage
 
@@ -259,17 +263,6 @@ export default function Page() {
   return <PDFConverter />;
 }
 ```
-
-## Performance Limits
-
-The PDF to Images conversion process is constrained by browser limitations and available system resources. Here are the recommended limits for optimal performance:
-
-| Resource        | Recommended Limit | Maximum Limit | Notes                                |
-| --------------- | ----------------- | ------------- | ------------------------------------ |
-| File Size       | 100MB             | 200MB         | Browser memory constraints           |
-| Page Count      | 100 pages         | 200-300 pages | Depends on content complexity        |
-| Page Dimensions | 5000x5000px       | 8192x8192px   | Browser canvas limits                |
-| Scale Factor    | 2.0               | 4.0           | Memory usage increases quadratically |
 
 ## Contributing
 
