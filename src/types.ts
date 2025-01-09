@@ -1,9 +1,33 @@
 import type {DocumentInitParameters} from 'pdfjs-dist/types/src/display/api';
 
 /**
+ * Configuration for batch processing of PDF pages
+ */
+export interface BatchProcessingConfig {
+  /**
+   * Number of pages to process in each batch
+   * @default 5
+   */
+  batchSize?: number;
+  /**
+   * Callback for progress updates
+   */
+  onProgress?: (progress: {
+    completed: number;
+    total: number;
+    batch: (string | Blob | ArrayBuffer)[];
+  }) => void;
+  /**
+   * Time in ms to wait between batches to prevent UI blocking
+   * @default 100
+   */
+  batchDelay?: number;
+}
+
+/**
  * Configuration options for converting PDF to images.
  */
-export type PDFToImagesOptions = {
+export type PDFToImagesOptions = BatchProcessingConfig & {
   /**
    * Output image format - either PNG or JPEG
    * @default 'png'

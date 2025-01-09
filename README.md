@@ -16,6 +16,7 @@ A lightweight, browser-based library for converting PDF files to images with eas
 - 📦 Multiple output formats (PNG/JPEG) and types (base64, buffer, blob, dataURL)
 - ⚡ Convert specific pages or page ranges
 - 🛡️ Robust error handling and TypeScript support
+- 🧠 Memory efficient with batch processing and cleanup
 
 [Demo](https://pdf-to-images-browser.arshadyaseen.com/)
 
@@ -83,13 +84,16 @@ The PDF document to convert. Accepts:
 
 Optional configuration object with the following properties:
 
-| Option      | Type                                          | Default     | Description                        |
-| ----------- | --------------------------------------------- | ----------- | ---------------------------------- |
-| `format`    | `'png' \| 'jpg'`                              | `'png'`     | Output image format                |
-| `scale`     | `number`                                      | `1.0`       | Scale factor for the output images |
-| `pages`     | `PDFPageSelection`                            | `'all'`     | Which pages to convert             |
-| `output`    | `'buffer' \| 'base64' \| 'blob' \| 'dataurl'` | `'base64'`  | Output format                      |
-| `docParams` | `PDFDocumentParams`                           | `undefined` | Additional PDF.js parameters       |
+| Option       | Type                                          | Default     | Description                          |
+| ------------ | --------------------------------------------- | ----------- | ------------------------------------ |
+| `format`     | `'png' \| 'jpg'`                              | `'png'`     | Output image format                  |
+| `scale`      | `number`                                      | `1.0`       | Scale factor for the output images   |
+| `pages`      | `PDFPageSelection`                            | `'all'`     | Which pages to convert               |
+| `output`     | `'buffer' \| 'base64' \| 'blob' \| 'dataurl'` | `'base64'`  | Output format                        |
+| `docParams`  | `PDFDocumentParams`                           | `undefined` | Additional PDF.js parameters         |
+| `batchSize`  | `number`                                      | `5`         | Number of pages to process per batch |
+| `batchDelay` | `number`                                      | `100`       | Delay in ms between batches          |
+| `onProgress` | `function`                                    | `undefined` | Progress callback function           |
 
 ### Page Selection Options
 
@@ -177,6 +181,23 @@ const blobImages = await pdfToImages(pdfFile, {
 // Get ArrayBuffer objects
 const bufferImages = await pdfToImages(pdfFile, {
   output: 'buffer',
+});
+```
+
+### Using Batch Processing
+
+```typescript
+// Process 3 pages at a time with progress updates
+const images = await pdfToImages(pdfFile, {
+  batchSize: 3,
+  batchDelay: 50,
+  onProgress: ({completed, total, batch}) => {
+    console.log(`Processed ${completed} of ${total} pages`);
+    // Handle new batch of images
+    batch.forEach(image => {
+      // Process each image in the batch
+    });
+  },
 });
 ```
 

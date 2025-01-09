@@ -8,6 +8,10 @@ export default function Demo() {
   const [images, setImages] = useState<string[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [progress, setProgress] = useState<{
+    completed: number;
+    total: number;
+  } | null>(null);
 
   const handleFileChange = async (
     event: React.ChangeEvent<HTMLInputElement>,
@@ -18,18 +22,26 @@ export default function Demo() {
     try {
       setLoading(true);
       setError(null);
+      setImages([]);
+      setProgress(null);
 
-      const imageResults = await pdfToImages(file, {
+      await pdfToImages(file, {
         format: 'png',
         output: 'dataurl',
-        scale: 2,
+        scale: 1.5,
+        batchSize: 3, // Process 3 pages at a time
+        batchDelay: 50, // 50ms delay between batches
+        onProgress: ({completed, total, batch}) => {
+          setProgress({completed, total});
+          // Append new batch of images
+          setImages(prev => [...prev, ...(batch as string[])]);
+        },
       });
-
-      setImages(imageResults as string[]);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to convert PDF');
     } finally {
       setLoading(false);
+      setProgress(null);
     }
   };
 
@@ -51,7 +63,9 @@ export default function Demo() {
 
         {loading && (
           <div className="text-gray-600 dark:text-gray-400">
-            Converting PDF to images...
+            {progress
+              ? `Converting pages ${progress.completed} of ${progress.total}...`
+              : 'Preparing PDF conversion...'}
           </div>
         )}
 
@@ -59,7 +73,7 @@ export default function Demo() {
       </div>
 
       {images.length > 0 && (
-        <div className="grid gap-4 sm:grid-cols-1 md:grid-cols-2">
+        <div className="grid gap-4 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
           {images.map((image, index) => (
             <div
               key={index}

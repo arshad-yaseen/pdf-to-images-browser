@@ -1,24 +1,16 @@
 import {getDocument} from 'pdfjs-dist';
-import type {
-  DocumentInitParameters,
-  PDFDocumentProxy,
-} from 'pdfjs-dist/types/src/display/api';
+import type {DocumentInitParameters} from 'pdfjs-dist/types/src/display/api';
 
-import {
-  CanvasRenderingError,
-  InvalidOutputOptionError,
-  InvalidPagesOptionError,
-} from './errors';
+import {InvalidPagesOptionError} from './errors';
 import type {PDFSource, PDFToImagesOptions, PDFToImagesResult} from './types';
 import {
   configurePDFToImagesParameters,
-  convertPDFBase64ToBuffer,
-  extractBase64FromDataURL,
   generatePDFPageRange,
+  renderPDFPageToImage,
 } from './utils';
 
 /**
- * Converts a PDF document to an array of images.
+ * Converts a PDF document to an array of images with improved performance.
  * @param source - The PDF source to convert.
  * @param options - Optional configuration options for the conversion.
  * @returns A promise that resolves to an array of images.
@@ -38,6 +30,8 @@ async function processPDF(
   documentParams: DocumentInitParameters,
   options: PDFToImagesOptions,
 ): Promise<(string | Blob | ArrayBuffer)[]> {
+  const {batchSize = 5, batchDelay = 100, onProgress} = options;
+
   const pdfDoc = await getDocument(documentParams).promise;
   const numPages = pdfDoc.numPages;
   const pages = options.pages || 'all';
@@ -62,55 +56,45 @@ async function processPDF(
     throw new InvalidPagesOptionError();
   }
 
-  const images = [];
-  for (const pageNumber of pageNumbers) {
-    const image = await renderPageToImage(pdfDoc, pageNumber, options);
-    images.push(image);
-    // Yield to event loop to prevent UI blocking
-    await new Promise(resolve => setTimeout(resolve, 0));
-  }
+  const allImages: (string | Blob | ArrayBuffer)[] = [];
+  const totalPages = pageNumbers.length;
 
-  return images;
-}
+  // Process pages in batches
+  for (let i = 0; i < pageNumbers.length; i += batchSize) {
+    const batchPageNumbers = pageNumbers.slice(i, i + batchSize);
+    const batchPromises = batchPageNumbers.map(pageNumber =>
+      renderPDFPageToImage(pdfDoc, pageNumber, options),
+    );
 
-async function renderPageToImage(
-  pdfDoc: PDFDocumentProxy,
-  pageNumber: number,
-  options: PDFToImagesOptions,
-): Promise<string | Blob | ArrayBuffer> {
-  const {scale = 1.0, format = 'png', output = 'base64'} = options;
+    // Process batch concurrently
+    const batchResults = await Promise.all(batchPromises);
 
-  const page = await pdfDoc.getPage(pageNumber);
-  const viewport = page.getViewport({scale});
+    // Clean up previous batch's canvases to free memory
+    if (typeof window !== 'undefined') {
+      batchPromises.length = 0;
+      await new Promise(resolve => setTimeout(resolve, 0)); // Yield to GC (just a hint)
+    }
 
-  const canvas = document.createElement('canvas');
-  const context = canvas.getContext('2d') as CanvasRenderingContext2D;
+    allImages.push(...batchResults);
 
-  canvas.height = viewport.height;
-  canvas.width = viewport.width;
-
-  const renderContext = {canvasContext: context, viewport};
-
-  await page.render(renderContext).promise;
-
-  const mimeType = format === 'jpg' ? 'image/jpeg' : 'image/png';
-  const dataURL = canvas.toDataURL(mimeType);
-
-  switch (output) {
-    case 'dataurl':
-      return dataURL;
-    case 'base64':
-      return extractBase64FromDataURL(dataURL);
-    case 'buffer':
-      return convertPDFBase64ToBuffer(extractBase64FromDataURL(dataURL));
-    case 'blob':
-      return new Promise<Blob>((resolve, reject) => {
-        canvas.toBlob(
-          blob => (blob ? resolve(blob) : reject(new CanvasRenderingError())),
-          mimeType,
-        );
+    // Report progress if callback provided
+    if (onProgress) {
+      onProgress({
+        completed: Math.min(i + batchSize, totalPages),
+        total: totalPages,
+        batch: batchResults,
       });
-    default:
-      throw new InvalidOutputOptionError();
+    }
+
+    batchResults.length = 0;
+
+    // Prevent UI blocking between batches
+    if (i + batchSize < pageNumbers.length) {
+      await new Promise(resolve => setTimeout(resolve, batchDelay));
+    }
   }
+
+  pageNumbers.length = 0;
+
+  return allImages;
 }

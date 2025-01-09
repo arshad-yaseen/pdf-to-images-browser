@@ -1,11 +1,8 @@
-
-
 ## [0.1.4](https://github.com/arshad-yaseen/pdf-to-images-browser/compare/0.1.3...0.1.4) (2025-01-07)
-
 
 ### 🔧 Maintenance
 
-* improve bundle ([5ee399a](https://github.com/arshad-yaseen/pdf-to-images-browser/commit/5ee399a316f06992ca74614e2cd3c275430514f7))
+- improve bundle ([5ee399a](https://github.com/arshad-yaseen/pdf-to-images-browser/commit/5ee399a316f06992ca74614e2cd3c275430514f7))
 
 ## [0.1.3](https://github.com/arshad-yaseen/pdf-to-images-browser/compare/0.1.2...0.1.3) (2025-01-07)
 

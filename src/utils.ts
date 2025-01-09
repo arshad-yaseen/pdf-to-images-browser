@@ -1,6 +1,10 @@
-import type {DocumentInitParameters} from 'pdfjs-dist/types/src/display/api';
+import type {
+  DocumentInitParameters,
+  PDFDocumentProxy,
+} from 'pdfjs-dist/types/src/display/api';
 
 import {DEFAULT_PDF_TO_IMAGES_OPTIONS} from './constants';
+import {CanvasRenderingError, InvalidOutputOptionError} from './errors';
 import type {PDFSource, PDFToImagesOptions} from './types';
 
 export function extractBase64FromDataURL(dataURL: string): string {
@@ -51,4 +55,78 @@ export function configurePDFToImagesParameters(
   const opts: PDFToImagesOptions = {...rest};
 
   return {documentParams, opts};
+}
+
+export async function renderPDFPageToImage(
+  pdfDoc: PDFDocumentProxy,
+  pageNumber: number,
+  options: PDFToImagesOptions,
+): Promise<string | Blob | ArrayBuffer> {
+  const {scale = 1.0, format = 'png', output = 'base64'} = options;
+
+  const page = await pdfDoc.getPage(pageNumber);
+  const viewport = page.getViewport({scale});
+
+  // Create canvas
+  const canvas = document.createElement('canvas');
+  const context = canvas.getContext('2d', {
+    alpha: false, // Optimize for non-transparent images
+  }) as CanvasRenderingContext2D;
+
+  canvas.height = viewport.height;
+  canvas.width = viewport.width;
+
+  // Render PDF page
+  const renderContext = {
+    canvasContext: context,
+    viewport,
+    enableWebGL: true, // Enable WebGL rendering if available
+  };
+
+  await page.render(renderContext).promise;
+
+  // Convert to desired format
+  const mimeType = format === 'jpg' ? 'image/jpeg' : 'image/png';
+  const result = await processCanvasOutput(canvas, mimeType, output);
+
+  // Clean up
+  canvas.width = 0;
+  canvas.height = 0;
+
+  // Help browser GC the canvas
+  if (typeof window !== 'undefined') {
+    await new Promise(resolve => setTimeout(resolve, 0));
+  }
+
+  return result;
+}
+
+export async function processCanvasOutput(
+  canvas: HTMLCanvasElement,
+  mimeType: string,
+  output: PDFToImagesOptions['output'],
+): Promise<string | Blob | ArrayBuffer> {
+  try {
+    switch (output) {
+      case 'dataurl':
+        return canvas.toDataURL(mimeType);
+      case 'base64':
+        return extractBase64FromDataURL(canvas.toDataURL(mimeType));
+      case 'buffer': {
+        const base64 = extractBase64FromDataURL(canvas.toDataURL(mimeType));
+        return convertPDFBase64ToBuffer(base64);
+      }
+      case 'blob':
+        return new Promise<Blob>((resolve, reject) => {
+          canvas.toBlob(
+            blob => (blob ? resolve(blob) : reject(new CanvasRenderingError())),
+            mimeType,
+          );
+        });
+      default:
+        throw new InvalidOutputOptionError();
+    }
+  } catch (error) {
+    throw new CanvasRenderingError();
+  }
 }
