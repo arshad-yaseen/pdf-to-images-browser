@@ -260,9 +260,7 @@ export default function Page() {
 }
 ```
 
-## Performance Limits and Best Practices
-
-### Browser Limitations
+## Performance Limits
 
 The PDF to Images conversion process is constrained by browser limitations and available system resources. Here are the recommended limits for optimal performance:
 
@@ -272,15 +270,6 @@ The PDF to Images conversion process is constrained by browser limitations and a
 | Page Count      | 100 pages         | 200-300 pages | Depends on content complexity        |
 | Page Dimensions | 5000x5000px       | 8192x8192px   | Browser canvas limits                |
 | Scale Factor    | 2.0               | 4.0           | Memory usage increases quadratically |
-
-### Best Practices
-
-To ensure efficient memory management and smooth PDF conversion:
-
-1. Process large PDFs in batches using the `batchSize` option (defaults to 3 pages per batch)
-2. Add delays between batches with `batchDelay` (defaults to 100ms) to prevent UI freezing
-3. Clean up unused image data after processing using the `onProgress` callback
-4. Keep scale factors reasonable (1.0-2.0) to limit memory usage
 
 ## Contributing
 
