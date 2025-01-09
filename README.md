@@ -16,7 +16,7 @@ A lightweight, browser-based library for converting PDF files to images with eas
 - 📦 Multiple output formats (PNG/JPEG) and types (base64, buffer, blob, dataURL)
 - ⚡ Convert specific pages or page ranges
 - 🛡️ Robust error handling and TypeScript support
-- 🧠 Memory efficient with batch processing and cleanup
+- 🧠 Super memory efficient with batch processing and cleanup
 
 [Demo](https://pdf-to-images-browser.arshadyaseen.com/)
 
@@ -27,10 +27,16 @@ A lightweight, browser-based library for converting PDF files to images with eas
 - [API Reference](#api-reference)
   - [Main Function](#main-function)
   - [Parameters](#parameters)
+- [Converting Specific Pages](#converting-specific-pages)
+- [Using Different Output Formats](#using-different-output-formats)
+- [Using Batch Processing](#using-batch-processing)
 - [Error Handling](#error-handling)
 - [Browser Compatibility](#browser-compatibility)
 - [Server-side usage](#server-side-usage)
   - [Next.js Usage](#nextjs-usage)
+- [Performance Limits and Best Practices](#performance-limits-and-best-practices)
+  - [Browser Limitations](#browser-limitations)
+  - [Best Practices](#best-practices)
 - [Contributing](#contributing)
 - [License](#license)
 
@@ -253,6 +259,28 @@ export default function Page() {
   return <PDFConverter />;
 }
 ```
+
+## Performance Limits and Best Practices
+
+### Browser Limitations
+
+The PDF to Images conversion process is constrained by browser limitations and available system resources. Here are the recommended limits for optimal performance:
+
+| Resource        | Recommended Limit | Maximum Limit | Notes                                |
+| --------------- | ----------------- | ------------- | ------------------------------------ |
+| File Size       | 100MB             | 200MB         | Browser memory constraints           |
+| Page Count      | 100 pages         | 200-300 pages | Depends on content complexity        |
+| Page Dimensions | 5000x5000px       | 8192x8192px   | Browser canvas limits                |
+| Scale Factor    | 2.0               | 4.0           | Memory usage increases quadratically |
+
+### Best Practices
+
+To ensure efficient memory management and smooth PDF conversion:
+
+1. Process large PDFs in batches using the `batchSize` option (defaults to 3 pages per batch)
+2. Add delays between batches with `batchDelay` (defaults to 100ms) to prevent UI freezing
+3. Clean up unused image data after processing using the `onProgress` callback
+4. Keep scale factors reasonable (1.0-2.0) to limit memory usage
 
 ## Contributing
 

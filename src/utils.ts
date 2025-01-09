@@ -4,7 +4,11 @@ import type {
 } from 'pdfjs-dist/types/src/display/api';
 
 import {DEFAULT_PDF_TO_IMAGES_OPTIONS} from './constants';
-import {CanvasRenderingError, InvalidOutputOptionError} from './errors';
+import {
+  CanvasRenderingError,
+  InvalidOutputOptionError,
+  PDFDocumentNotInitializedError,
+} from './errors';
 import type {PDFSource, PDFToImagesOptions} from './types';
 
 export function extractBase64FromDataURL(dataURL: string): string {
@@ -58,10 +62,14 @@ export function configurePDFToImagesParameters(
 }
 
 export async function renderPDFPageToImage(
-  pdfDoc: PDFDocumentProxy,
+  pdfDoc: PDFDocumentProxy | null,
   pageNumber: number,
   options: PDFToImagesOptions,
 ): Promise<string | Blob | ArrayBuffer> {
+  if (!pdfDoc) {
+    throw new PDFDocumentNotInitializedError();
+  }
+
   const {scale = 1.0, format = 'png', output = 'base64'} = options;
 
   const page = await pdfDoc.getPage(pageNumber);
@@ -83,22 +91,22 @@ export async function renderPDFPageToImage(
     enableWebGL: true, // Enable WebGL rendering if available
   };
 
-  await page.render(renderContext).promise;
+  try {
+    await page.render(renderContext).promise;
 
-  // Convert to desired format
-  const mimeType = format === 'jpg' ? 'image/jpeg' : 'image/png';
-  const result = await processCanvasOutput(canvas, mimeType, output);
+    // Convert to desired format
+    const mimeType = format === 'jpg' ? 'image/jpeg' : 'image/png';
+    const result = await processCanvasOutput(canvas, mimeType, output);
 
-  // Clean up
-  canvas.width = 0;
-  canvas.height = 0;
+    return result;
+  } finally {
+    canvas.width = 0;
+    canvas.height = 0;
+    page.cleanup();
 
-  // Help browser GC the canvas
-  if (typeof window !== 'undefined') {
+    // Yield to GC
     await new Promise(resolve => setTimeout(resolve, 0));
   }
-
-  return result;
 }
 
 export async function processCanvasOutput(

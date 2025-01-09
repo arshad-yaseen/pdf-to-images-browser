@@ -28,3 +28,9 @@ export class CanvasRenderingError extends PDFToImagesError {
     super('Canvas toBlob failed');
   }
 }
+
+export class PDFDocumentNotInitializedError extends PDFToImagesError {
+  constructor() {
+    super('PDF document is not initialized');
+  }
+}
