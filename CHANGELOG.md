@@ -1,11 +1,17 @@
 
 
-## [0.1.5](https://github.com/arshad-yaseen/pdf-to-images-browser/compare/0.1.4...0.1.5) (2025-01-09)
+## [0.1.6](https://github.com/arshad-yaseen/pdf-to-images-browser/compare/0.1.5...0.1.6) (2025-01-09)
 
+
+### 📚 Documentation
+
+* memory ([4b8b27a](https://github.com/arshad-yaseen/pdf-to-images-browser/commit/4b8b27a5de3fc41e53698dfdc35ab75219af23ed))
+
+## [0.1.5](https://github.com/arshad-yaseen/pdf-to-images-browser/compare/0.1.4...0.1.5) (2025-01-09)
 
 ### ⚡️ Performance
 
-* implement batch processing ([701eec8](https://github.com/arshad-yaseen/pdf-to-images-browser/commit/701eec8fe81e2b529af1832b73a8b0df8357318d))
+- implement batch processing ([701eec8](https://github.com/arshad-yaseen/pdf-to-images-browser/commit/701eec8fe81e2b529af1832b73a8b0df8357318d))
 
 ## [0.1.4](https://github.com/arshad-yaseen/pdf-to-images-browser/compare/0.1.3...0.1.4) (2025-01-07)
 
